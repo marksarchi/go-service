@@ -3,6 +3,8 @@ package handlers
 import (
 	"net/http"
 	"github.com/sarchimark/go-service/product-api/data"
+	"context"
+	protos "github.com/marksarchi/go-service/currency/protos/currency"
 )
 
 // swagger:route GET /products products listProducts
@@ -54,6 +56,31 @@ func (p *Products) ListSingle(rw http.ResponseWriter, r *http.Request) {
 		data.ToJSON(&GenericError{Message: err.Error()}, rw)
 		return
 	}
+	 
+	//get exchange rate
+    rr:= &protos.RateRequest{
+		Base : protos.Currencies(protos.Currencies_value["EUR"]),
+		Destination: protos.Currencies(protos.Currencies_value["GBP"]),
+	
+	}
+	
+
+	resp, err := p.cc.GetRate(context.Background(),rr)
+	p.l.Println("[DEBUG] transaction rate", resp.Rate) 
+
+	rate := resp.Rate
+	p.l.Println("[DEBUG] Rate=", rate)
+
+	_rate := resp.GetRate()
+	p.l.Println("[DEBUG] GetRate()", _rate)
+
+	if err!= nil {
+		p.l.Println("[Error] getting new rate" )
+		data.ToJSON(&GenericError{Message:err.Error()},rw)
+		return
+	}
+	prod.Price = prod.Price * resp.GetRate()
+	p.l.Println("[DEBUG] get record price", prod.Price)
 
 	err = data.ToJSON(prod, rw)
 	if err != nil {

@@ -11,10 +11,11 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	gohandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	protos "github.com/marksarchi/go-service/currency/protos/currency"
 	"github.com/nicholasjackson/env"
 	"github.com/sarchimark/go-service/product-api/data"
 	"github.com/sarchimark/go-service/product-api/handlers"
-	"github.com/marksarchi/go-service/currency/protos/currency"
+	"google.golang.org/grpc"
 )
 
 var bindAddress = env.String("BIND_ADDRESS", false, ":9090", "Bind address for the server")
@@ -26,8 +27,18 @@ func main() {
 	l := log.New(os.Stdout, "products-api ", log.LstdFlags)
 	v := data.NewValidation()
 
+
+	conn, err := grpc.Dial("localhost:9092",grpc.WithInsecure())
+	if err != nil {
+		panic(err)
+
+	}
+	defer conn.Close()
+
+	//create client
+	cc := protos.NewCurrencyClient(conn)
 	// create the handlers
-	ph := handlers.NewProducts(l, v)
+	ph := handlers.NewProducts(l, v , cc)
 
 	// create a new serve mux and register the handlers
 	sm := mux.NewRouter()
