@@ -1,12 +1,11 @@
 package server
 
-import(
+import (
 	"context"
+
 	"github.com/hashicorp/go-hclog"
-	protos "github.com/sarchimark/go-service/currency/protos/currency"
+	protos "github.com/marksarchi/go-service/currency/protos/currency"
 )
-
-
 
 // Currency is a gRPC server it implements the methods defined by the CurrencyServer interface
 type Currency struct {

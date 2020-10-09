@@ -1,17 +1,18 @@
 package main
 
-import(
-	"github.com/hashicorp/go-hclog"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
-	protos "github.com/sarchimark/go-service/currency/protos/currency"
-	"github.com/sarchimark/go-service/currency/server"
+import (
 	"fmt"
 	"net"
 	"os"
+
+	"github.com/hashicorp/go-hclog"
+	protos "github.com/marksarchi/go-service/currency/protos/currency"
+	"github.com/marksarchi/go-service/currency/server"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
-func main(){
+func main() {
 	log := hclog.Default()
 
 	// create a new gRPC server, use WithInsecure to allow http connections

@@ -1,4 +1,4 @@
-module github.com/sarchimark/go-service/currency
+module github.com/marksarchi/go-service/currency
 
 go 1.14
 

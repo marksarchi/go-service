@@ -14,7 +14,7 @@ import (
 	"github.com/nicholasjackson/env"
 	"github.com/sarchimark/go-service/product-api/data"
 	"github.com/sarchimark/go-service/product-api/handlers"
-	protos "github.com/sarchimark/go-service/currency/protos/currency"
+	"github.com/marksarchi/go-service/currency/protos/currency"
 )
 
 var bindAddress = env.String("BIND_ADDRESS", false, ":9090", "Bind address for the server")
